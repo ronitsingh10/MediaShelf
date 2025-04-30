@@ -1,7 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import SignInForm from "@/components/auth/sign-in-form";
+import { Suspense } from "react";
 
 const SignIn = () => {
   return (
@@ -13,7 +12,9 @@ const SignIn = () => {
         </p>
       </div>
 
-      <SignInForm />
+      <Suspense fallback={<div>Loading form...</div>}>
+        <SignInForm />
+      </Suspense>
 
       <div className="text-center text-sm">
         Don&apos;t have an account?{" "}
