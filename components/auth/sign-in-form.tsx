@@ -81,6 +81,7 @@ const SignInForm = () => {
         onSuccess: async (ctx) => {
           toast.success("Successfully signed in!");
           const newSession = await authClient.getSession();
+          console.log("Session data:", newSession.data);
           router.push(
             !newSession.data.user.userName ? "/select-username" : redirectUrl
           );

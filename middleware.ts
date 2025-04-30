@@ -11,6 +11,8 @@ export default async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/sign-up");
 
   const sessionCookie = getSessionCookie(request);
+  console.log("Session cookie:", sessionCookie); // Add this for debugging
+
 
   if (sessionCookie && isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url));
