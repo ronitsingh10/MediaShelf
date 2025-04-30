@@ -6,22 +6,31 @@ import { getSessionCookie } from "better-auth";
 type Session = typeof auth.$Infer.Session;
 
 export default async function middleware(request: NextRequest) {
-  const sessionCookie = getSessionCookie(request);
+  // const sessionCookie = getSessionCookie(request);
+  const { data: session } = await betterFetch<Session>(
+    "/api/auth/get-session",
+    {
+      baseURL: request.nextUrl.origin,
+      headers: {
+        cookie: request.headers.get("cookie") || "", // Forward the cookies from the request
+      },
+    }
+  );
 
   // Debug logging (temporarily for production)
   console.log("URL Path:", request.nextUrl.pathname);
-  console.log("Session Cookie:", sessionCookie);
+  console.log("Session Cookie:", session);
   console.log("Cookies:", request.cookies.toString());
 
   const isAuthPage =
     request.nextUrl.pathname.startsWith("/sign-in") ||
     request.nextUrl.pathname.startsWith("/sign-up");
 
-  if (sessionCookie && isAuthPage) {
+  if (session && isAuthPage) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (!sessionCookie && !isAuthPage) {
+  if (!session && !isAuthPage) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
