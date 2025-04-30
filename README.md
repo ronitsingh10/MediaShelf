@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catalog App
+
+A modern web application for tracking and sharing your media consumption - books, movies, games, and more. This platform allows users to catalog their media collection, track progress, rate items, follow other users, and see activity in a social feed.
+
+## Features
+
+- **User Authentication**: Secure sign-up and login functionality
+- **Media Catalog**: Track books, movies, games, and other media types
+- **Progress Tracking**: Record your progress through different media
+- **Rating System**: Rate and review your media collection
+- **Social Features**: Follow other users and see their activity
+- **Activity Feed**: View a personalized feed of activity from people you follow
+- **Search**: Find media and users across the platform
+- **Responsive UI**: Modern, responsive interface built with Next.js and Tailwind CSS
+
+## Tech Stack
+
+- **Frontend**:
+  - [Next.js 15](https://nextjs.org/) with App Router
+  - [React 19](https://react.dev/)
+  - [Tailwind CSS](https://tailwindcss.com/) for styling
+  - [shadcn/ui](https://ui.shadcn.com/) (via Radix UI components)
+  - [Lucide React](https://lucide.dev/) for icons
+  - [React Hook Form](https://react-hook-form.com/) with Zod for form validation
+
+- **Backend**:
+  - [Next.js Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/forms-and-mutations) for API functionality
+  - [Better Auth](https://better-auth.dev/) for authentication
+  - [Drizzle ORM](https://orm.drizzle.team/) for database interactions
+  - [Neon PostgreSQL](https://neon.tech/) as the database provider
+  - [Redis](https://redis.io/) via [ioredis](https://github.com/redis/ioredis) for:
+    - Social activity feed storage and distribution
+    - Follow/follower relationship caching
+    - User activity tracking
+    - Real-time feed updates with fan-out architecture
+    - Performance optimization with TTL-based expiry
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js 19+ 
+- npm or yarn
+- Redis (for local development)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/catalog-app.git
+   cd catalog-app
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-## Learn More
+3. Configure environment variables:
+   - Create a `.env` file in the root directory with required variables (see `.env.example` for reference)
+   - Set your Redis connection string in the `UPSTASH_REDIS_REST_URL` environment variable
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database Schema
 
-## Deploy on Vercel
+The application uses a PostgreSQL database with the following main tables:
+- `user` - User accounts and profiles
+- `media` - Media items (books, movies, games)
+- `user_media` - User collection items with status, rating, notes
+- `follows` - User follow relationships
+- `session` - Authentication sessions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Redis Data Model
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application leverages Redis for high-performance social features:
+- Sorted sets for time-ordered activity feeds
+- Sets for storing follower/following relationships
+- Hash maps for activity data with TTL expiration
+- Pipelining for efficient multi-key operations
+- Fan-out architecture for distributing activities to follower feeds
