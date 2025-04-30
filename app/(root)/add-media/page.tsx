@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import ItemTypeSelector from "./components/ItemTypeSelector";
 import { useEffect, useState } from "react";
 import SearchForm from "./components/SearchForm";
