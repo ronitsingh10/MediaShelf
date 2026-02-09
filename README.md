@@ -1,4 +1,4 @@
-# Catalog App
+# MediaShelf: Cataloging Social App
 
 A modern web application for tracking and sharing your media consumption - books, movies, games, and more. This platform allows users to catalog their media collection, track progress, rate items, follow other users, and see activity in a social feed.
 
